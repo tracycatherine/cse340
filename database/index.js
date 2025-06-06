@@ -19,7 +19,7 @@ if (process.env.DATABASE_URL) {
     host: process.env.DB_HOST || 'localhost',
     database: process.env.DB_NAME || 'cse340',
     password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT || 5432,
+    port: process.env.DB_PORT || 5433,
     ssl: false
   })
 }
