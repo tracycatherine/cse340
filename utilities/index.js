@@ -8,7 +8,7 @@ utilities.getNav = async function (req, res, next) {
   let data = await inventoryModel.getClassifications()
   let list = "<ul>"
   list += '<li><a href="/" title="Home page">Home</a></li>'
-  data.rows.forEach((row) => {
+  data.forEach((row) => {
     list += "<li>"
     list +=
       '<a href="/inventory/type/' +
