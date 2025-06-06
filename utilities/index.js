@@ -5,31 +5,23 @@ const utilities = {}
  * Constructs the nav HTML unordered list
  ************************** */
 utilities.getNav = async function (req, res, next) {
-  try {
-    console.log('Building navigation...')
-    let data = await inventoryModel.getClassifications()
-    let list = "<ul>"
-    list += '<li><a href="/" title="Home page">Home</a></li>'
-    data.forEach((row) => {
-      list += "<li>"
-      list +=
-        '<a href="/inventory/type/' +
-        row.classification_id +
-        '" title="See our inventory of ' +
-        row.classification_name +
-        ' vehicles">' +
-        row.classification_name +
-        "</a>"
-      list += "</li>"
-    })
-    list += "</ul>"
-    console.log('Navigation built successfully')
-    return list
-  } catch (error) {
-    console.error('Error building navigation:', error.message)
-    // Return a basic navigation if database fails
-    return '<ul><li><a href="/" title="Home page">Home</a></li></ul>'
-  }
+  let data = await inventoryModel.getClassifications()
+  let list = "<ul>"
+  list += '<li><a href="/" title="Home page">Home</a></li>'
+  data.rows.forEach((row) => {
+    list += "<li>"
+    list +=
+      '<a href="/inventory/type/' +
+      row.classification_id +
+      '" title="See our inventory of ' +
+      row.classification_name +
+      ' vehicles">' +
+      row.classification_name +
+      "</a>"
+    list += "</li>"
+  })
+  list += "</ul>"
+  return list
 }
 
 /* **************************************
@@ -37,13 +29,13 @@ utilities.getNav = async function (req, res, next) {
 * ************************************ */
 utilities.buildClassificationGrid = async function (data) {
   let grid
-  if (data && data.length > 0) {
+  if (data.length > 0) {
     grid = '<ul id="inv-display">'
     data.forEach(vehicle => {
       grid += '<li>'
       grid += '<a href="../../inventory/detail/' + vehicle.inv_id
         + '" title="View ' + vehicle.inv_make + ' ' + vehicle.inv_model
-        + ' details"><img src="' + vehicle.inv_thumbnail
+        + 'details"><img src="' + vehicle.inv_thumbnail
         + '" alt="Image of ' + vehicle.inv_make + ' ' + vehicle.inv_model
         + ' on CSE Motors" /></a>'
       grid += '<div class="namePrice">'
@@ -60,19 +52,19 @@ utilities.buildClassificationGrid = async function (data) {
     })
     grid += '</ul>'
   } else {
-    grid = '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+    grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
   }
   return grid
 }
 
 /* ****************************************
- * Build single vehicle display HTML
+ * Middleware For Handling Errors
+ * Wrap other function in this for 
+ * General Error Handling
  **************************************** */
+utilities.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
+
 utilities.buildSingleVehicleDisplay = async (vehicle) => {
-  if (!vehicle) {
-    return '<p class="notice">Sorry, vehicle details could not be found.</p>'
-  }
-  
   let svd = '<section id="vehicle-display">'
   svd += "<div>"
   svd += '<section class="imagePrice">'
@@ -103,15 +95,6 @@ utilities.buildSingleVehicleDisplay = async (vehicle) => {
   svd += "</div>"
   svd += "</section>"
   return svd
-}
-
-/* ****************************************
- * Middleware For Handling Errors
- * Wrap other function in this for 
- * General Error Handling
- **************************************** */
-utilities.handleErrors = fn => (req, res, next) => {
-  Promise.resolve(fn(req, res, next)).catch(next)
 }
 
 module.exports = utilities
