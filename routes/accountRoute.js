@@ -1,7 +1,8 @@
+// Needed Resources
 const express = require("express");
 const router = new express.Router();
 const accountController = require("../controllers/accountController");
-const utilities = require("../utilities/index");
+const utilities = require("../utilities/");
 const { registationRules, checkRegData, loginRules, checkLoginData } = require('../utilities/account-validation');
 
 // Route for when 'My Account' is clicked

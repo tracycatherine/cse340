@@ -91,7 +91,7 @@ validate.loginRules = () => {
       .custom(async (account_email) => {
         const emailExists = await accountModel.checkExistingEmail(account_email)
         if (!emailExists){
-          throw new Error("Email does not exist. Please try again.")
+          throw new Error("Email does not exist. Please register.")
         }
       }),
 
@@ -106,7 +106,7 @@ validate.loginRules = () => {
         minNumbers: 1,
         minSymbols: 1,
       })
-      .withMessage("Password does not meet requirements. Please try again"),
+      .withMessage("Password does not meet requirements."),
   ]
 }
 

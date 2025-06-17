@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 
 function checkAdminOrEmployee(req, res, next) {
-    const token = req.headers['authorization']?.split(' ')[1]; // Extract token from headers
+    // Extract token from cookies
+    const token = req.cookies.jwt;
 
     if (!token) {
         return res.redirect('/account/login?message=Access denied. Please log in.'); // Redirect if no token

@@ -4,7 +4,6 @@ const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
 const { validationResult } = require("express-validator");
-const ticketModel = require("../models/supportTicket-model")
 
 /* ****************************************
 *  Deliver login view
@@ -246,7 +245,7 @@ async function updateAccount(req, res, next) {
 }
 
 /* ****************************************
- *  Change passwork logic
+ *  Change password logic
  * ************************************ */
 async function changePassword(req, res, next) {
   const { new_password, account_id } = req.body;
@@ -255,81 +254,25 @@ async function changePassword(req, res, next) {
   res.redirect("/account");
 }
 
-/* ***************************
- *  Render Ticket Submission View
- * ************************** */
-async function buildSubmitTicketView(req, res) {
-    try {
-        const nav = await utilities.getNav();
-        res.render("account/tickets", {
-            title: "Submit a Ticket",
-            nav,
-            errors: null,
-            flash: req.flash(),
-        });
-    } catch (error) {
-        console.error("Error rendering ticket submission view:", error);
-        req.flash("error", "Unable to load the page.");
-        res.redirect("/account");
-    }
+async function buildUserTicketsView(req, res, next) {
+  let nav = await utilities.getNav();
+  // You can fetch user tickets here if you have a model for it
+  res.render("account/myTickets", {
+    title: "My Tickets",
+    nav,
+    errors: null,
+    // tickets: tickets, // Uncomment and use if you fetch tickets
+  });
 }
 
-/* ***************************
- *  Submit a New Ticket
- * ************************** */
-async function submitTicket(req, res) {
-    const { title, description, priority } = req.body;
-    const accountId = res.locals.accountData.account_id;
-
-    try {
-        await ticketModel.createTicket(accountId, title, description, priority);
-        req.flash("notice", "Your ticket has been submitted.");
-        res.redirect("/account/myTickets");
-    } catch (error) {
-        console.error("Error submitting ticket:", error);
-        req.flash("error", "Failed to submit ticket.");
-        const nav = await utilities.getNav();
-        res.render("account/tickets", {
-            title: "Submit a Ticket",
-            nav,
-            errors: null,
-            flash: req.flash(),
-        });
-    }
+module.exports = {
+  buildLogin,
+  buildRegistration,
+  registerAccount,
+  accountLogin,
+  buildAccount,
+  buildUpdateView,
+  updateAccount,
+  changePassword,
+  buildUserTicketsView
 }
-
-/* ***************************
- *  Render User Tickets View
- * ************************** */
-async function buildUserTicketsView(req, res) {
-    const accountId = res.locals.accountData.account_id;
-    const nav = await utilities.getNav();
-    const tickets = await ticketModel.getUserTickets(accountId);
-
-    res.render("account/manageTicket", {
-        title: "My Tickets",
-        nav,
-        tickets,
-        user: res.locals.accountData,
-        flash: req.flash(),
-    });
-}
-
-/* ***************************
- *  Render Admin Tickets View
- * ************************** */
-async function buildAdminTicketsView(req, res) {
-    const nav = await utilities.getNav();
-    const tickets = await ticketModel.getAllTickets();
-
-    res.render("/account/manageTicket", {
-        title: "Manage Tickets",
-        nav,
-        tickets,
-        user: res.locals.accountData,
-        flash: req.flash(),
-    });
-}
-
-module.exports = { buildLogin, buildRegistration, registerAccount, accountLogin, buildAccount, 
-  buildUpdateView, updateAccount, changePassword, buildSubmitTicketView, submitTicket, buildUserTicketsView, buildAdminTicketsView }
