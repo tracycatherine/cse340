@@ -1,7 +1,7 @@
 // Needed Resources
 const express = require("express");
 const router = new express.Router();
-const accountController = require("../controllers/accountController");
+const accountController = require("../controllers/accountcontroller");
 const utilities = require("../utilities/");
 const { registationRules, checkRegData, loginRules, checkLoginData } = require('../utilities/account-validation');
 
