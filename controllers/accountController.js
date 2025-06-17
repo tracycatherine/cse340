@@ -137,7 +137,7 @@ async function accountLogin(req, res) {
     };
 
     // Set JWT in a cookie
-    res.cookie("jwt", token, cookieOptions);
+    res.cookie("jwt", token, { httpOnly: true, secure: true, sameSite: "strict" });
 
     // Flash success message and redirect
     req.flash("notice", "Login successful. Welcome back!");

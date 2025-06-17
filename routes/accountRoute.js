@@ -48,7 +48,7 @@ router.post("/change-password", utilities.handleErrors(accountController.changeP
 
 // Route for logout
 router.get("/logout", (req, res) => {
-  res.clearCookie("jwt");
+  res.clearCookie("jwt", { path: "/account" });
   res.redirect("/");
 });
 

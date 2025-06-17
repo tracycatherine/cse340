@@ -24,6 +24,7 @@ const flash = require("connect-flash");
 const pgSession = require("connect-pg-simple")(session);
 const messages = require("express-messages");
 const reviewRoutes = require("./routes/reviewRoutes");
+const path = require("path");
 
 /* ***********************
  * Middleware
@@ -131,3 +132,5 @@ const host = process.env.HOST || "localhost";
 app.listen(port, () => {
   console.log(`Server is running at http://${host}:${port}`);
 });
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
