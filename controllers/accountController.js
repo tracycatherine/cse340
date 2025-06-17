@@ -255,13 +255,10 @@ async function changePassword(req, res, next) {
 }
 
 async function buildUserTicketsView(req, res, next) {
-  let nav = await utilities.getNav();
-  // You can fetch user tickets here if you have a model for it
   res.render("account/myTickets", {
     title: "My Tickets",
-    nav,
-    errors: null,
-    // tickets: tickets, // Uncomment and use if you fetch tickets
+    errors: null // Always pass errors, even if there are none
+    // ...other variables
   });
 }
 
@@ -275,4 +272,4 @@ module.exports = {
   updateAccount,
   changePassword,
   buildUserTicketsView
-}
+};
