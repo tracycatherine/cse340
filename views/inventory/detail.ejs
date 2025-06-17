@@ -1,3 +1,35 @@
 <div id="vehicle-detail">
     <%- vehicleHTML %> 
 </div>
+
+<!-- Show errors -->
+<% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+  <ul>
+    <% errors.forEach(function(error) { %>
+      <li style="color:red;"><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<!-- Review Form -->
+<h2>Leave a Review</h2>
+<form action="/reviews/add" method="POST">
+  <input type="hidden" name="vehicle_id" value="<%= vehicle.inv_id %>">
+  <textarea name="review_text" required minlength="3" maxlength="500" placeholder="Write your review here"></textarea>
+  <br>
+  <button type="submit">Submit Review</button>
+</form>
+
+<!-- Show reviews -->
+<ul>
+  <% if (reviews && reviews.length > 0) { %>
+    <% reviews.forEach(function(review) { %>
+      <li>
+        <strong><%= review.account_firstname %>:</strong>
+        <%= review.review_text %> <em>(<%= review.review_date.toLocaleString() %>)</em>
+      </li>
+    <% }) %>
+  <% } else { %>
+    <li>No reviews yet.</li>
+  <% } %>
+</ul>

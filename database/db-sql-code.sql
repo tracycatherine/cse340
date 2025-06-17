@@ -265,10 +265,10 @@ ORDER BY classification_id ASC;
 
 CREATE TABLE review (
   review_id SERIAL PRIMARY KEY,
+  vehicle_id INT REFERENCES inventory(inventory_id),
+  account_id INT REFERENCES account(account_id),
   review_text TEXT NOT NULL,
-  review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  inv_id INTEGER NOT NULL REFERENCES inventory(inv_id),
-  account_id INTEGER NOT NULL REFERENCES account(account_id)
+  review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 SELECT * FROM public."Review"

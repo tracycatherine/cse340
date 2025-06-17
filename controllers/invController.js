@@ -1,4 +1,5 @@
 const invModel = require("../models/inventory-model");
+const reviewModel = require("../models/reviewModel");
 const utilities = require("../utilities");
 
 const invCont = {}
@@ -46,6 +47,7 @@ invCont.buildByInvId = async function (req, res, next) {
       throw error;
     }
 
+    const reviews = await reviewModel.getReviewsByVehicle(inv_id);
     const vehicleTemplate = await utilities.buildVehiclePage(data);
     const nav = await utilities.getNav();
     const vehicleName = `${data.inv_year} ${data.inv_make} ${data.inv_model}`;
@@ -53,6 +55,7 @@ invCont.buildByInvId = async function (req, res, next) {
       title: vehicleName,
       nav,
       vehicleTemplate,
+      reviews,
       errors: null,
     });
   } catch (error) {
@@ -105,6 +108,7 @@ invCont.buildByInvId = async function (req, res, next) {
       throw error;
     }
 
+    const reviews = await reviewModel.getReviewsByVehicle(inv_id);
     const vehicleTemplate = await utilities.buildVehiclePage(data);
     const nav = await utilities.getNav();
     const vehicleName = `${data.inv_year} ${data.inv_make} ${data.inv_model}`;
@@ -112,6 +116,7 @@ invCont.buildByInvId = async function (req, res, next) {
       title: vehicleName,
       nav,
       vehicleTemplate,
+      reviews,
       errors: null,
     });
   } catch (error) {

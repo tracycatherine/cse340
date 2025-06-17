@@ -1,0 +1,5 @@
+<form action="/reviews/add" method="POST">
+  <input type="hidden" name="vehicle_id" value="<%= vehicle.inventory_id %>">
+  <textarea name="review_text" required minlength="3" maxlength="500"></textarea>
+  <button type="submit">Submit Review</button>
+</form>
